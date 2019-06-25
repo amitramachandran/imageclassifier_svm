@@ -1,16 +1,16 @@
 from pathlib import Path
+import matplotlib.pyplot as plt
+import matplotlib
 import numpy as np
 import skimage
 import os
 from sklearn import svm, metrics
 from sklearn.utils import Bunch
 from sklearn.model_selection import GridSearchCV, train_test_split
-
-
 from skimage.io import imread
 from skimage.transform import resize
+matplotlib.use("TkAgg")
 
-#Given below are the path of the image files. 
 folder_path = "/home/amit/PycharmProjects/imageclassifierwithsvm/sample_images"
 test_data_path = "/home/amit/PycharmProjects/imageclassifierwithsvm/Test_data"
 
@@ -56,20 +56,23 @@ def load_image_files(container_path, dimension=(64, 64)):
                  DESCR=descr)
 
 def input_prediction(img_path):
-"""
-The function is to predict the class of the images in the Test_data folder
-for each file the predicted class is printed in the output.
-
-Parameters
+    """
+    The function is to predict the class of the images in the Test_data folder
+    for each file the predicted class is popped as the image with target label as
+    title.
+    
+    Parameters
     ----------
     img_path : string or unicode
-        Path to the test folder holding pictures that has to be predicted
+        Path to the test folder holding test images to predict
 
     Returns
     -------
-    Prints the predicition class (binary) 
+    image plotted and displayed with name as title.
 
-"""
+    """
+    #Change the target name according to the prediction class you train them on. 
+    target_name = {0: "eskimo_dog", 1: "pug"}
 
     d = img_path
     for path in os.listdir(d):
@@ -81,7 +84,12 @@ Parameters
             flat_dicdata = (img_resized.flatten())
             flat_dicdata = np.array(flat_dicdata).reshape(1, -1)
             prediction = clf.predict(flat_dicdata)
-            print(prediction)
+            target_class = target_name[int(prediction)]
+            plt.figure()
+            plt.imshow(img)
+            plt.title("Predicted as " + target_class)
+            #plt.suptitle("Accuracy is" + metrics.accuracy_score(y_test, flat_dicdata))
+            plt.show()
 
 
 image_dataset = load_image_files(folder_path)
@@ -100,7 +108,7 @@ clf.fit(X_train, y_train)
 y_pred = clf.predict(X_test)
 
 #Remove the below comment to print the classification report for the SVM trained metrics
-#print("Classification report for SVM classifier- \n{}\n".format(metrics.classification_report(y_test, y_pred)))
+print("Classification report for SVM classifier- \n{}\n".format(metrics.classification_report(y_test, y_pred)))
 
 #function to get the prediction for the images inside the test data.
 input_prediction(test_data_path)
