@@ -10,6 +10,7 @@ from sklearn.model_selection import GridSearchCV, train_test_split
 from skimage.io import imread
 from skimage.transform import resize
 
+#Given below are the path of the image files. 
 folder_path = "/home/amit/PycharmProjects/imageclassifierwithsvm/sample_images"
 test_data_path = "/home/amit/PycharmProjects/imageclassifierwithsvm/Test_data"
 
@@ -58,6 +59,15 @@ def input_prediction(img_path):
 """
 The function is to predict the class of the images in the Test_data folder
 for each file the predicted class is printed in the output.
+
+Parameters
+    ----------
+    img_path : string or unicode
+        Path to the test folder holding pictures that has to be predicted
+
+    Returns
+    -------
+    Prints the predicition class (binary) 
 
 """
 
